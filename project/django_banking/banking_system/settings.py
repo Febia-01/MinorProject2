@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 LOGIN_REDIRECT_URL = '/transactions/report'
+LOGIN_URL = 'two_factor:login'  # Add this line for two-factor authentication login URL
+
 
 
 # Application definition
@@ -43,6 +45,14 @@ INSTALLED_APPS = [
 
     'django_celery_beat',
 
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_email',  
+    'two_factor',
+    'two_factor.plugins.phonenumber',  
+    'two_factor.plugins.email',  
+
     'accounts',
     'core',
     'transactions',
@@ -54,6 +64,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -137,6 +148,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [ 
     BASE_DIR / "static",
     ]
+
+
+
+
 
 # Celery Settings
 CELERY_BROKER_URL = 'redis://localhost:6379'
